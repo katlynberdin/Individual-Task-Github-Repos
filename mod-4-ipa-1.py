@@ -35,11 +35,13 @@ def relationship_status(from_member, to_member, social_graph):
     # Stay within the function. Only use the parameters as input. The function should return your answer.
     Status = all([from_member in social_graph[to_member]['following'],to_member in social_graph[from_member]['following']])
     if Status == True:
-        Results = ("Friends")
+        Results = ("friends")
     elif (to_member in social_graph[from_member]['following']) == True:
-        Results = ("Follower")
+        Results = ("follower")
     elif (from_member in social_graph[to_member]['following']) == True:
-        Results = ("Followed by")
+        Results = ("followed by")
+    else:
+        Results = ("no relationship")
     return(Results)
 
 
@@ -133,20 +135,20 @@ def eta(first_stop, second_stop, route_map):
     # Replace `pass` with your code. 
     # Stay within the function. Only use the parameters as input. The function should return your answer.
     if first_stop == 'upd' and second_stop == 'dlsu':
-        eta = legs['upd','admu']['travel_time_mins'] + legs['admu','dlsu']['travel_time_mins']
+        eta = route_map['upd','admu']['travel_time_mins'] + route_map['admu','dlsu']['travel_time_mins']
     elif first_stop == 'admu' and second_stop == 'upd':
-        eta = legs['admu','dlsu']['travel_time_mins'] + legs['dlsu','upd']['travel_time_mins']
+        eta = route_map['admu','dlsu']['travel_time_mins'] + route_map['dlsu','upd']['travel_time_mins']
     else:
-        eta = legs[first_stop,second_stop]['travel_time_mins']
+        eta = route_map[first_stop,second_stop]['travel_time_mins']
     return eta
 
 
 # for second legs:
 
     if first_stop == 'a1' and second_stop == 'b1':
-        eta = legs['a1','a2']['travel_time_mins'] + legs['a2','b1']['travel_time_mins']
+        eta = route_map['a1','a2']['travel_time_mins'] + route_map['a2','b1']['travel_time_mins']
     elif first_stop == 'a2' and second_stop == 'a1':
-        eta = legs['a2','b1']['travel_time_mins'] + legs['b1','a1']['travel_time_mins']
+        eta = route_map['a2','b1']['travel_time_mins'] + route_map['b1','a1']['travel_time_mins']
     else:
-        eta = legs[first_stop,second_stop]['travel_time_mins']
+        eta = route_map'[first_stop,second_stop]['travel_time_mins']
     return eta
