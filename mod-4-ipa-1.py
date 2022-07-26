@@ -79,48 +79,40 @@ def tic_tac_toe(board):
     '''
     # Replace `pass` with your code. 
     # Stay within the function. Only use the parameters as input. The function should return your answer.
-    demoset = ()
-    demoset = [board[i][i] for i in range(3)]
-    vertical = [x for x in zip(*board)]
+    pos1 = 0 
+    pos2 = 0
     
-    #diagonals
-    if all([s=='X' for s in demoset]) == True:
-        result = ('X')
-    elif all([s=='O' for s in demoset]) == True:
-        result = ('O')
+    for i in board:
+        for j in i:
+            if board[pos1][pos2] == "X":
+                board[pos1][pos2] = 1
+            
+            elif board[pos1][pos2] == "O":
+                board[pos1][pos2] = -1
+            
+            else:
+                board[pos1][pos2] = 0
+            
+            pos2 += 1
+        pos2 = 0
+        pos1 += 1
         
-    #horizontals
-    elif all([s=='X' for s in board[0]]) == True:
-        result = ('X')
-    elif all([s=='X' for s in board[1]]) == True:
-        result = ('X')
-    elif all([s=='X' for s in board[2]]) == True:
-        result = ('X')
-    elif all([s=='O' for s in board[0]]) == True:
-        result = ('O')
-    elif all([s=='O' for s in board[1]]) == True:
-        result = ('O')
-    elif all([s=='O' for s in board[2]]) == True:
-        result = ('O')
-    #verticals
-    elif all([s=='X' for s in vertical[0]]) == True:
-        result = ('X')
-    elif all([s=='X' for s in vertical[1]]) == True:
-        result = ('X')
-    elif all([s=='X' for s in vertical[2]]) == True:
-        result = ('X')
-    elif all([s=='O' for s in vertical[0]]) == True:
-        result = ('O')
-    elif all([s=='O' for s in vertical[1]]) == True:
-        result = ('O')
-    elif all([s=='O' for s in vertical[2]]) == True:
-        result = ('O')
+    cap = len(board) - 1
+    score = len(board)
     
+    horizontal = [sum(x) for x in board]
+    vertical = [sum(x) for x in zip(*board)]
+    updown_diagonal = [sum([board[i][i] for i,v in enumerate(board)])]
+    downup_diagonal = [sum([board[cap-i][i] for i,v in enumerate(board)])]
+    
+    if max(horizontal) == score or max(vertical) == score or max(updown_diagonal) == score or max(downup_diagonal) == score:
+        return "X"
+    elif min(horizontal) == -score or min(vertical) == -score or min(updown_diagonal) == -score or min(downup_diagonal) == -score:
+        return "O"
     else:
-        result = ('NO WINNER')
-    return result
-
-
+        return "NO WINNER"
+    
+    
 def eta(first_stop, second_stop, route_map):
     '''ETA. 
     25 points.
@@ -152,10 +144,39 @@ def eta(first_stop, second_stop, route_map):
     '''
     # Replace `pass` with your code. 
     # Stay within the function. Only use the parameters as input. The function should return your answer.
-    if first_stop == 'upd' and second_stop == 'dlsu':
-        eta = route_map['upd','admu']['travel_time_mins'] + route_map['admu','dlsu']['travel_time_mins']
-    if first_stop == 'admu' and second_stop == 'upd':
-        eta = route_map['admu','dlsu']['travel_time_mins'] + route_map['dlsu','upd']['travel_time_mins']
+    route = (first_stop, second_stop)
+    
+    if route in route_map:
+        return route_map[route]["travel_time_mins"]
     else:
-        eta = route_map[first_stop,second_stop]['travel_time_mins']
-    return eta
+        keys = list(route_map.keys())
+        total_time = 0
+        i = 0
+        for i in range(len(keys)):
+            if first_stop == keys[i][0]:
+                total_time += route_map[keys[i]]["travel_time_mins"]
+                break 
+                
+        def destination(second_stop, keys):
+            time_passed = 0
+            j = i + 1
+            while j < len(keys):
+                time_passed += route_map[keys[j]]["travel_time_mins"]
+                if second_stop != keys[j][1]:
+                    j += 1
+                else:
+                    break
+                    
+            if j == len(keys):
+                j = 0
+                while j < len(keys):
+                    time_passed += route_map[keys[j]]["travel_time_mins"]
+                    if second_stop != keys[j][1]:
+                        j += 1
+                    else:
+                        break
+                        
+            return time_passed 
+        
+        total_time += destination(second_stop, keys)
+        return total_time
